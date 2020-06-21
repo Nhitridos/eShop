@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Category;
+use Auth;
 
 class PostsController extends Controller
 {
@@ -16,9 +18,9 @@ class PostsController extends Controller
     {
         $posts = Post::orderBy('id', 'desc')->get();
         //$posts = Post::all();
-
+        //$categories = Category::all();
         //$posts = Post::orderBy('title', 'desc')->paginate(10); - pozriet neskor!!
-        return view('posts.index')->with('posts', $posts);
+        return view('posts.index', compact('posts'));//compact('posts', 'categories'));
 
     }
 
@@ -43,15 +45,20 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'topic' => 'required'
+            'category_id' => 'required'
         ]);
 
         // Create Post
         $post = new Post;
         $post->title = $request->input('title');
         $post->body = $request->input('body');
-        $post->user_id = auth()->user()->id;
-        $post->topic = $request->input('topic');
+        if (Auth::check()){
+            $post->user_id = auth()->user()->id;
+        }
+        else {
+            return redirect('/posts')->with('error', 'No user logged in!');
+        }
+        $post->category_id = $request->input('category_id');
         $post->save();
 
         return redirect('/posts')->with('success', 'Post Created');
@@ -93,14 +100,14 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
-            'topic' => 'required'
+            'category_id' => 'required'
         ]);
 
         // Update Post
         $post = Post::find($id);
         $post->title = $request->input('title');
         $post->body = $request->input('body');
-        $post->topic = $request->input('topic');
+        $post->category_id = $request->input('category_id');
         $post->save();
 
         return redirect('/posts')->with('success', 'Post Updated');
@@ -116,29 +123,42 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
         $post->delete();
-        return redirect('/posts')->with('success', 'Post Removed');
+        return redirect('/home')->with('success', 'Post Removed');
     }
 
-    public function answer($id)
+    // /**
+    //  * Show the form for answering the specified resource.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function answer($id){
+    //     $post = Post::find($id);
+    //     return view('/posts/answer')->with('post', $post);
+    // }
+
+    // public function storeAnswer(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'body' => 'required',
+    //     ]);
+
+    //     // Create Post
+    //     $post = new Post;
+    //     $post->title = $request->input('title');
+    //     $post->body = $request->input('body');
+    //     $post->user_id = auth()->user()->id;
+    //     $post->topic = $request->input('topic');
+    //     $post->save();
+
+    //     return redirect('/posts')->with('success', 'Post Created');
+    // }
+
+    public function showPostsCategory($id)
     {
-        $post = Post::find($id);
-        return view('posts.answer');
-    }
+        $posts = Post::all()->where('category_id', '=', $id);
+        $categories = Category::all();
 
-    public function storeAnswer(Request $request)
-    {
-        $this->validate($request, [
-            'body' => 'required',
-        ]);
-
-        // Create Post
-        $post = new Post;
-        $post->title = $request->input('title');
-        $post->body = $request->input('body');
-        $post->user_id = auth()->user()->id;
-        $post->topic = $request->input('topic');
-        $post->save();
-
-        return redirect('/posts')->with('success', 'Post Created');
+        return view('/posts/index')->with('posts', 'categories', $posts, $categories);
     }
 }

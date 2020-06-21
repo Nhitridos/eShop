@@ -26,8 +26,11 @@ Route::get('/hello', function () {
 
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
+//Route::get('/posts/answer', 'PostsController@answer');
 
 Route::resource('posts', 'PostsController');
+Route::get('posts/show/{id}', 'PostsController@showPostsCategory')->name('show.posts.category');
+//Route::get('posts/answer', 'PostsController@answer')->name('posts.answer');
 
 // Route::get('/users/{id}', function ($id) {
 //     return 'This is user '.$id;

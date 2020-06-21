@@ -8,8 +8,8 @@
             {{Form::text('title', '', ['class' => 'form-control', 'placeholder' => 'Title'])}}
         </div>
         <div class="form-group">
-            {{Form::label('topic', 'Topic')}}
-            <select id = "myList" name="topic">
+            {{Form::label('category_id', 'Category ID')}}
+            <select id = "myList" name="category_id">
                 <option value = "1" selected>Bylinky</option>
                 <option value = "2">Tilda</option>
                 <option value = "3">Ostatne</option>

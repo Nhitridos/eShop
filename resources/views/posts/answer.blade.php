@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Answer</h1>
-    {!! Form::open(['action' => ['PostsController@update', $post->id], 'method' => 'POST']) !!}
+    {!! Form::open(['action' => ['PostsController@answer', $post->id], 'method' => 'POST']) !!}
         <fieldset disabled="disabled">
             <div class="form-group">
                 {{Form::label('title', 'Title')}}
@@ -17,10 +17,10 @@
                 </select>
             </div>
         </fieldset>
-        <div class="form-group">
+        {{-- <div class="form-group">
             {{Form::label('body', 'Body')}}
             {{Form::textarea('body', , ['id' => 'article-ckeditor', 'class' => 'form-control', 'placeholder' => 'Text'])}}
         </div>
-        {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
+        {{Form::submit('Submit', ['class' => 'btn btn-primary'])}} --}}
     {!! Form::close() !!}
 @endsection

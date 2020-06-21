@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    {{-- @foreach($categories as $category)
+        <a href="{{route('show.posts.category', $category->id)}}" class="btn btn-outline-secondary">{{$category->name}}</a>
+    @endforeach --}}
     <a href="/posts" class="btn btn-outline-secondary">Vsetky</a>
     <a href="/posts" class="btn btn-outline-secondary">Bylinky</a>
     <a href="/posts" class="btn btn-outline-secondary">Tilda</a>
